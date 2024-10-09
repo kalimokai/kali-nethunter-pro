@@ -1,0 +1,72 @@
+.device-pinephone:
+  extends:
+    - .arch-arm64
+  variables:
+    MOBIAN_DEVICE_FAMILY: "sunxi"
+    MOBIAN_DEVICE_NAME: "pinephone"
+    MOBIAN_INCLUDE_NONFREE: "true"
+    DEVICEFS_UPLOAD: "true"
+
+.device-pinephonepro:
+  extends:
+    - .arch-arm64
+  variables:
+    MOBIAN_DEVICE_FAMILY: "rockchip"
+    MOBIAN_DEVICE_NAME: "pinephonepro"
+    MOBIAN_INCLUDE_NONFREE: "true"
+
+.device-pinetab:
+  extends:
+    - .arch-arm64
+  variables:
+    MOBIAN_DEVICE_FAMILY: "sunxi"
+    MOBIAN_DEVICE_NAME: "pinetab"
+    MOBIAN_INCLUDE_NONFREE: "true"
+
+.device-pinetab2:
+  extends:
+    - .arch-arm64
+  variables:
+    MOBIAN_DEVICE_FAMILY: "rockchip"
+    MOBIAN_DEVICE_NAME: "pinetab2"
+
+.device-librem5:
+  extends:
+    - .arch-arm64
+  variables:
+    MOBIAN_DEVICE_FAMILY: "librem5"
+    MOBIAN_DEVICE_NAME: "librem5"
+    MOBIAN_BOOT_PARTITION_START: "8MiB"
+
+.device-qcom:
+  extends:
+    - .arch-arm64
+  variables:
+    MOBIAN_DEVICE_FAMILY: "qcom"
+    MOBIAN_INCLUDE_NONFREE: "true"
+    MOBIAN_EXTRA_DEBOS_ARGS: "-e MKE2FS_DEVICE_SECTSIZE:4096 -t bootonroot:true"
+
+.device-sdm845:
+  extends:
+    - .device-qcom
+  variables:
+    MOBIAN_DEVICE_NAME: "sdm845"
+
+.device-sm7225:
+  extends:
+    - .device-qcom
+  variables:
+    MOBIAN_DEVICE_NAME: "sm7225"
+
+.device-amd64:
+  extends:
+    - .arch-amd64
+  variables:
+    MOBIAN_DEVICE_NAME: "amd64"
+
+.device-amd64-nonfree:
+  extends:
+    - .arch-amd64
+  variables:
+    MOBIAN_DEVICE_NAME: "amd64-nonfree"
+    MOBIAN_INCLUDE_NONFREE: "true"

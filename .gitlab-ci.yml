@@ -1,0 +1,249 @@
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#
+## REF (Project): https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-pro/-/settings/ci_cd
+#
+
+## Settings -> CI/CD -> Variables -> Expand -> Add variable
+#   - Type: Variable
+#   - Environments: All (default)
+#   - Visibility: Masked
+#   - Flags
+#       Protect variable: Enabled
+#       Expand variable reference: Disabled
+#   - Key: MOBIAN_CI_SSH_KEY
+#   - Value: <kali_nethunterpro_build_os_private_key | base64 -w0; echo>
+
+## Settings -> CI/CD -> Variables -> Expand -> Add variable
+#   - Type: Variable
+#   - Environments: All (default)
+#   - Visibility: Masked
+#   - Flags
+#       Protect variable: Enabled
+#       Expand variable reference: Disabled
+#   - Key: SSH_USER
+#   - Value: <kali_nethunterpro_build_os_user>
+
+## Settings -> CI/CD -> Variables -> Expand -> Add variable
+#   - Type: Variable
+#   - Environments: All (default)
+#   - Visibility: Masked
+#   - Flags
+#       Protect variable: Enabled
+#       Expand variable reference: Disabled
+#   - Key: MOBIAN_CACHE_HOST
+#   - Value: <ansible_host>
+
+## Settings -> CI/CD -> Variables -> Expand -> Add variable
+#   - Type: Variable
+#   - Environments: All (default)
+#   - Visibility: Masked
+#   - Flags
+#       Protect variable: Enabled
+#       Expand variable reference: Disabled
+#   - Key: MOBIAN_IMAGES_HOST
+#   - Value: <ansible_host>
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+## Can't use GitLab SaaS artifacts, as the files are larger than that max size (1GB+): 2024-08-18
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+include:
+  - .gitlab-ci/job-definitions.yml
+  - .gitlab-ci/global-declarations.yml
+  - .gitlab-ci/devices.yml
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#                                    rootfs                                   #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+rootfs-amd64-phosh:
+  extends:
+    - .rootfs-generic
+    - .arch-amd64
+    - .shell-phosh
+
+rootfs-arm64-phosh:
+  extends:
+    - .rootfs-generic
+    - .arch-arm64
+    - .shell-phosh
+
+## NetHunter Pro doesn't have an 'installer' platform at this point in time
+#installfs-arm64:
+#  extends:
+#    - .rootfs-installer
+#    - .arch-arm64
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#                                   devicefs                                  #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## NetHunter Pro doesn't have an 'installer' platform at this point in time  ##
+
+#devicefs-librem5-phosh:
+#  extends:
+#    - .devicefs
+#    - .device-librem5
+#    - .shell-phosh
+#  needs:
+#    - rootfs-arm64-phosh
+
+#devicefs-pinephone-phosh:
+#  extends:
+#    - .devicefs
+#    - .device-pinephone
+#    - .shell-phosh
+#  needs:
+#    - rootfs-arm64-phosh
+
+#devicefs-pinephonepro-phosh:
+#  extends:
+#    - .devicefs
+#    - .device-pinephonepro
+#    - .shell-phosh
+#  needs:
+#    - rootfs-arm64-phosh
+
+#devicefs-pinetab-phosh:
+#  extends:
+#    - .devicefs
+#    - .device-pinetab
+#    - .shell-phosh
+#  needs:
+#    - rootfs-arm64-phosh
+
+#devicefs-pinetab2-phosh:
+# extends:
+#   - .devicefs
+#   - .device-pinetab2
+#   - .shell-phosh
+# needs:
+#   - rootfs-arm64-phosh
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#                                     image                                   #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+image-pinephone-phosh:
+  extends:
+    - .image
+    - .device-pinephone
+    - .shell-phosh
+  needs:
+    - rootfs-arm64-phosh
+
+image-pinephonepro-phosh:
+  extends:
+    - .image
+    - .device-pinephonepro
+    - .shell-phosh
+  needs:
+    - rootfs-arm64-phosh
+
+#image-pinetab-phosh:
+#  extends:
+#    - .image
+#    - .device-pinetab
+#    - .shell-phosh
+#  needs:
+#    - rootfs-arm64-phosh
+
+#image-pinetab2-phosh:
+#  extends:
+#    - .image
+#    - .device-pinetab2
+#    - .shell-phosh
+#  needs:
+#    - rootfs-arm64-phosh
+
+#image-librem5-phosh:
+#  extends:
+#    - .image
+#    - .device-librem5
+#    - .shell-phosh
+#  needs:
+#    - rootfs-arm64-phosh
+
+image-sdm845-phosh:
+  extends:
+    - .image
+    - .device-sdm845
+    - .shell-phosh
+  needs:
+    - rootfs-arm64-phosh
+
+image-sm7225-phosh:
+  extends:
+    - .image
+    - .device-sm7225
+    - .shell-phosh
+  needs:
+    - rootfs-arm64-phosh
+
+#image-amd64-phosh:
+#  extends:
+#    - .image
+#    - .device-amd64
+#    - .shell-phosh
+#  needs:
+#    - rootfs-amd64-phosh
+
+image-amd64-nonfree-phosh:
+  extends:
+    - .image
+    - .device-amd64-nonfree
+    - .shell-phosh
+  needs:
+    - rootfs-amd64-phosh
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#                                  installer                                  #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## NetHunter Pro doesn't have an 'installer' platform at this point in time  ##
+
+#installer-librem5-phosh:
+#  extends:
+#    - .installer
+#    - .device-librem5
+#    - .shell-phosh
+#  needs:
+#    - installfs-arm64
+#    - devicefs-librem5-phosh
+
+#installer-pinephone-phosh:
+#  extends:
+#    - .installer
+#    - .device-pinephone
+#    - .shell-phosh
+#  needs:
+#    - installfs-arm64
+#    - devicefs-pinephone-phosh
+
+#installer-pinephonepro-phosh:
+#  extends:
+#    - .installer
+#    - .device-pinephonepro
+#    - .shell-phosh
+#  needs:
+#    - installfs-arm64
+#    - devicefs-pinephonepro-phosh
+
+#installer-pinetab-phosh:
+#  extends:
+#    - .installer
+#    - .device-pinetab
+#    - .shell-phosh
+#  needs:
+#    - installfs-arm64
+#    - devicefs-pinetab-phosh
+
+#installer-pinetab2-phosh:
+# extends:
+#   - .installer
+#   - .device-pinetab2
+#   - .shell-phosh
+# needs:
+#   - installfs-arm64
+#   - devicefs-pinetab2-phosh

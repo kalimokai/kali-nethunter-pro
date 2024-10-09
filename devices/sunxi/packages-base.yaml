@@ -1,0 +1,27 @@
+{{- $architecture := or .architecture "arm64" -}}
+{{- $device := or .device "pinephone" }}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: apt
+    recommends: false
+    description: Install device-specific base packages
+    packages:
+      - {{ $device }}-support
+      - rsync
+
+  - action: run
+    description: Enable eg25-manager service
+    chroot: true
+    command: systemctl enable eg25-manager.service
+
+  - action: run
+    description: Update initramfs
+    chroot: true
+    command: echo "RESUME=none" > /etc/initramfs-tools/conf.d/resume; update-initramfs -u; rm -f /etc/initramfs-tools/conf.d/resume
+
+  - action: run
+    description: Update u-boot
+    chroot: true
+    command: u-boot-update 

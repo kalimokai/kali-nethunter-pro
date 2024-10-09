@@ -1,0 +1,65 @@
+image: registry.salsa.debian.org/mobian-team/docker-images/mobian-image-ci-amd64:latest
+
+stages:
+  - rootfs
+  - devicefs
+  - image
+  - installer
+
+default:
+  retry: 1
+  interruptible: true
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "${MOBIAN_CI_SSH_KEY}" | base64 -d | ssh-add -
+    - unset MOBIAN_CI_SSH_KEY
+    - mkdir -pv ~/.ssh/
+    - ssh-keyscan -t ssh-ed25519 ${MOBIAN_CACHE_HOST} > ~/.ssh/known_hosts
+    - |
+      if [ -f "$MOBIAN_SSH_KEY" ]; then
+          chmod 0400 "$MOBIAN_SSH_KEY"
+          ssh-add "$MOBIAN_SSH_KEY"
+      fi
+  tags:
+    - kvm
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    ## REF: https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-pro/
+    - if: $CI_PROJECT_ROOT_NAMESPACE == "kalilinux"
+      when: always
+    - when: never
+
+variables:
+  DEBIAN_SUITE: "kali-rolling"
+  MOBIAN_SUITE: "bookworm"
+  MOBIAN_BOOT_PARTITION_START: "1MiB"
+  MOBIAN_FILESYSTEM: "ext4"
+  MOBIAN_IMAGE_SIZE: "6GB"
+  MOBIAN_INSTALLER_SIZE: "8GB"
+  MOBIAN_INCLUDE_NONFREE: "false"
+  MOBIAN_MINIRAMFS: "false"
+  MOBIAN_PARTITION_TABLE: "gpt"
+  ARTIFACTS_ROOT: /srv/builder/artifacts
+  DEVICEFS_UPLOAD: "false"
+  IMAGES_ROOT: /srv/builder/images
+  IMAGES_CI_ROOT: /srv/builder/ci-images
+  MOBIAN_IMAGES_HOST: mobian.org
+  MOBIAN_CACHE_HOST: amd64-ssd.runner.mobian.org
+
+.arch-amd64:
+  variables:
+    ARCH: amd64
+    MOBIAN_DEVICE_FAMILY: "amd64"
+    MOBIAN_IMAGE_SIZE: "15GB"
+    MOBIAN_INSTALLER_SIZE: "10GB"
+
+.arch-arm64:
+  variables:
+    ARCH: arm64
+
+.shell-phosh:
+  variables:
+    MOBIAN_GRAPHICAL_SHELL: "phosh"

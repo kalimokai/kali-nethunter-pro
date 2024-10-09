@@ -1,0 +1,21 @@
+{{- $architecture := or .architecture "arm64" -}}
+{{- $ssh := or .ssh "" -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: run
+    description: Fix packages if broken
+    chroot: true
+    command: apt install --fix-broken -y
+
+  - action: apt
+    recommends: false
+    description: Install base packages
+    packages:
+      - mobian-base
+      - kali-linux-core
+      - kali-themes-mobile
+{{ if $ssh }}
+      - openssh-server
+{{ end }}

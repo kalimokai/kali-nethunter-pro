@@ -1,0 +1,21 @@
+[bootimg]
+base = 0x0
+kernel = 0x8000
+ramdisk = 0x1000000
+second = 0x00f00000
+tags = 0x100
+pagesize = 4096
+
+[[device]]
+vendor = "xiaomi"
+model = "elish"
+variant = "boe"
+append = ""
+# append = "console=ttyMSM0,115200"
+
+[[device]]
+vendor = "xiaomi"
+model = "elish"
+variant = "cost"
+append = ""
+# append = "console=ttyMSM0,115200"

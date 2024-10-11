@@ -52,6 +52,12 @@
   variables:
     MOBIAN_DEVICE_NAME: "sdm845"
 
+.device-sm8250:
+  extends:
+    - .device-qcom
+  variables:
+    MOBIAN_DEVICE_NAME: "sm8250"
+
 .device-sm7225:
   extends:
     - .device-qcom

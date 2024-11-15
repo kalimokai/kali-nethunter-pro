@@ -108,8 +108,6 @@ case "${DEVICE}" in
 		generate_bootimg -r "${ROOTPART}" -s "qcom/sdm845" -v "xiaomi" -m "beryllium" -w "tianma"
 		generate_bootimg -r "${ROOTPART}" -s "qcom/sdm845" -v "xiaomi" -m "beryllium" -w "ebbg"
 		generate_bootimg -r "${ROOTPART}" -s "qcom/sdm845" -v "xiaomi" -m "polaris"
-		generate_bootimg -r "${ROOTPART}" -s "qcom/sm8250" -v "xiaomi" -m "elish" -w "boe"
-		generate_bootimg -r "${ROOTPART}" -s "qcom/sm8250" -v "xiaomi" -m "elish" -w "cost"
 		;;
 	"sm7225")
 		generate_bootimg -r "${ROOTPART}" -s "qcom/sm7225" -v "fairphone" -m "fp4"
@@ -117,6 +115,10 @@ case "${DEVICE}" in
 	"sm7325")
 		generate_bootimg -r "${ROOTPART}" -s "qcom/sm7325" -v "nothing" -m "spacewar" -k 0x10000000 -d 0x10000000 -t 0x10000000
 		;;
+  "sm8250")
+    generate_bootimg -r "${ROOTPART}" -s "qcom/sm8250" -v "xiaomi" -m "elish" -w "boe"
+		generate_bootimg -r "${ROOTPART}" -s "qcom/sm8250" -v "xiaomi" -m "elish" -w "cost"
+    ;;
 	*)
 		echo "ERROR: unsupported device ${DEVICE}"
 		exit 1

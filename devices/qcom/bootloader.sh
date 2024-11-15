@@ -117,7 +117,7 @@ case "${DEVICE}" in
 		;;
   "sm8250")
     generate_bootimg -r "${ROOTPART}" -s "qcom/sm8250" -v "xiaomi" -m "elish" -w "boe"
-		generate_bootimg -r "${ROOTPART}" -s "qcom/sm8250" -v "xiaomi" -m "elish" -w "cost"
+    generate_bootimg -r "${ROOTPART}" -s "qcom/sm8250" -v "xiaomi" -m "elish" -w "cost"
     ;;
 	*)
 		echo "ERROR: unsupported device ${DEVICE}"
